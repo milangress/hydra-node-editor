@@ -6,6 +6,12 @@ import store from "./store";
 
 Vue.config.productionTip = false;
 
+import { BaklavaVuePlugin } from "@baklavajs/plugin-renderer-vue";
+import "@baklavajs/plugin-renderer-vue/dist/styles.css";
+// import "@/css/baklavaOverwrites.css";
+
+Vue.use(BaklavaVuePlugin);
+
 new Vue({
   router,
   store,

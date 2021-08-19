@@ -1,0 +1,10 @@
+.node {
+    max-width: 20rem;
+    background: rgba(255, 255, 255, 0.8);
+    color: #000;
+    border-radius: 4px;
+    position: absolute;
+    /*filter: drop-shadow(0 0 3px rgba(0,0,0,0.8));*/
+    transition: box-shadow 0.1s linear,filter 0.1s linear;
+    outline: 1px red;
+}
