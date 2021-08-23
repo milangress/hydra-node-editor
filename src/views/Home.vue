@@ -96,6 +96,7 @@ export default {
     filter: none;
     //filter: drop-shadow(0 0 3px rgba(0,0,0,0.8));
     transition: box-shadow 0.1s linear, filter 0.1s linear;
+    resize: both;
   }
 
   .node > .__title {

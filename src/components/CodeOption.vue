@@ -1,9 +1,9 @@
 <template>
   <prism-editor
     class="my-editor input-user-select"
-    v-model="value"
+    v-model="privatValue"
     :highlight="highlighter"
-    v-on="listeners"
+    v-on:input="listeners"
     line-numbers
     v-bind:readonly="false"
   ></prism-editor>
@@ -25,14 +25,24 @@ export default {
     PrismEditor,
   },
   props: ["value"],
-  data: () => ({ code: 'console.log("Hello World")' }),
+  data: () => ({
+    privatValue: 'osc(50,0.1,1.5)',
+  }),
   methods: {
     highlighter(code) {
-      return highlight(code, languages.js, 'markup'); // languages.<insert language> to return html with markup
+      return highlight(code, languages.js, "markup"); // languages.<insert language> to return html with markup
     },
-    listeners() {
-      return { ...this.$listeners, input: (ev) => this.$emit("input", ev.target.value[0]) };
-    }
+    mounted() {
+      this.privatValue = this.value
+    },
+    watch: {
+      value: function (val) {
+        this.privatValue = val
+      }
+    },
+    listeners(ev) {
+      this.$emit("input", ev)
+    },
   },
 };
 </script>
@@ -56,7 +66,8 @@ export default {
   pointer-events: auto;
 }
 
-.my-editor .prism-editor__editor {
+.my-editor .prism-editor__editor,
+.my-editor .prism-editor__editor *{
   user-select: none;
   pointer-events: none;
 }
@@ -65,8 +76,6 @@ export default {
 .prism-editor__textarea:focus {
   outline: none;
 }
-
-
 
 /* Syntax highlighting */
 .token.comment,

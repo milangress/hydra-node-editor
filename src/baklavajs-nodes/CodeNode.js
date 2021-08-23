@@ -2,7 +2,7 @@ import { NodeBuilder } from "@baklavajs/core";
 
 export const CodeNode = new NodeBuilder("CodeNode", {
   twoColumn: true,
-  width: "300px",
+  width: "200px",
 })
   .setName("Code")
   .addOutputInterface("Out")
