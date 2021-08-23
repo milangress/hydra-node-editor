@@ -1,7 +1,7 @@
 <template>
   <div class="hydra-canvas-container" ref="hydraCanvasContainer">
     <canvas class="hydra-canvas" ref="hydraCanvas"></canvas>
-<!--    <p>{{currentHydraCodeString}}</p>-->
+    <p>{{currentHydraCodeString}}</p>
   </div>
 </template>
 
@@ -51,7 +51,7 @@ export default{
   watch: {
     value: {
       // the callback will be called immediately after the start of the observation
-      immediate: true,
+      /*immediate: true,*/
       handler (val) {
         this.currentHydraCodeString = val
         this.updateCanvas(val)

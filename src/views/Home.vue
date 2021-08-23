@@ -12,10 +12,11 @@ import { Engine } from "@baklavajs/plugin-engine";
 // import { MathNode } from "@/baklavajs-nodes/MathNode";
 // import { DisplayNode } from "@/baklavajs-nodes/DisplayNode";
 import { RenderNode } from "@/baklavajs-nodes/RenderNode";
-// import { TextNode } from "@/baklavajs-nodes/TextNode";
-import { CodeNode } from "@/baklavajs-nodes/CodeNode"
+import { TextNode } from "@/baklavajs-nodes/TextNode";
+import { CodeNode } from "@/baklavajs-nodes/CodeNode";
 
 import RenderOption from "@/components/RenderOption.vue";
+import CodeOption from "@/components/CodeOption.vue";
 
 /*import HydraSynth from 'hydra-synth';*/
 
@@ -43,6 +44,7 @@ export default {
     this.viewPlugin.enableMinimap = true;
 
     this.viewPlugin.registerOption("RenderOption", RenderOption);
+    this.viewPlugin.registerOption("CodeOption", CodeOption)
 
 
     // register the nodes we have defined, so they can be
@@ -51,10 +53,11 @@ export default {
     //this.editor.registerNodeType("DisplayNode", DisplayNode);
     this.editor.registerNodeType("CodeNode", CodeNode);
     this.editor.registerNodeType("RenderNode", RenderNode);
+    this.editor.registerNodeType("TextNode", TextNode);
 
     // add some nodes so the screen is not empty on startup
     // const node1 = this.addNodeWithCoordinates(MathNode, 100, 140);
-    // const node2 = this.addNodeWithCoordinates(DisplayNode, 200, 140);
+    this.addNodeWithCoordinates(TextNode, 200, 340);
     const node1 = this.addNodeWithCoordinates(CodeNode, 100, 140);
     const node2 = this.addNodeWithCoordinates(RenderNode, 500, 140);
     this.editor.addConnection(
@@ -116,6 +119,9 @@ export default {
     background: #fff;
     color: #000;
     border: 1px solid #000;
+  }
+  .--type-CodeNode {
+    width: 300px
   }
 }
 </style>

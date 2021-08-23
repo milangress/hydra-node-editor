@@ -1,11 +1,25 @@
 import { NodeBuilder } from "@baklavajs/core";
 
-export const TextNode = new NodeBuilder("TextNode")
+export const TextNode = new NodeBuilder("TextNode", {
+  twoColumn: true,
+  width: "300px",
+})
   .setName("Text")
-  .addInputInterface("Text", "InputOption", 'osc(50,0.1,1.5).out()')
-  .addOutputInterface("Output")
+  .addOutputInterface("Out")
+  .addInputInterface("In")
+  .addOption("Text", "InputOption", "osc(50,0.1,1.5)")
   .onCalculate((n) => {
-    const code = n.getInterface("Text").value;
-    n.getInterface("Output").value = code;
+    let codeBefore = n.getInterface("In").value;
+    if (codeBefore === null) {
+      codeBefore = "";
+    } else {
+      codeBefore += ".";
+    }
+    const newCode = n.getOptionValue("Text");
+    if (typeof newCode !== "string") {
+      newCode.toString();
+    }
+    const codeString = codeBefore + newCode;
+    n.getInterface("Out").value = codeString;
   })
   .build();
