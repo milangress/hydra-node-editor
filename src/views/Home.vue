@@ -1,5 +1,5 @@
 <template>
-  <div id="node-editor" style="height: 80vh; width: 80vw">
+  <div id="node-editor" style="height: 80vh; width: 100%">
     <baklava-editor :plugin="viewPlugin" />
   </div>
 </template>
@@ -9,8 +9,16 @@ import { Editor } from "@baklavajs/core";
 import { ViewPlugin } from "@baklavajs/plugin-renderer-vue";
 import { OptionPlugin } from "@baklavajs/plugin-options-vue";
 import { Engine } from "@baklavajs/plugin-engine";
-import { MathNode } from "@/baklavajs-nodes/MathNode";
-import { DisplayNode } from "@/baklavajs-nodes/DisplayNode";
+// import { MathNode } from "@/baklavajs-nodes/MathNode";
+// import { DisplayNode } from "@/baklavajs-nodes/DisplayNode";
+import { RenderNode } from "@/baklavajs-nodes/RenderNode";
+// import { TextNode } from "@/baklavajs-nodes/TextNode";
+import { CodeNode } from "@/baklavajs-nodes/CodeNode"
+
+import RenderOption from "@/components/RenderOption.vue";
+
+/*import HydraSynth from 'hydra-synth';*/
+
 
 export default {
   components: {},
@@ -34,19 +42,28 @@ export default {
     // Show a minimap in the top right corner
     this.viewPlugin.enableMinimap = true;
 
+    this.viewPlugin.registerOption("RenderOption", RenderOption);
+
+
     // register the nodes we have defined, so they can be
     // added by the user as well as saved & loaded.
-    this.editor.registerNodeType("MathNode", MathNode);
-    this.editor.registerNodeType("DisplayNode", DisplayNode);
+    //this.editor.registerNodeType("MathNode", MathNode);
+    //this.editor.registerNodeType("DisplayNode", DisplayNode);
+    this.editor.registerNodeType("CodeNode", CodeNode);
+    this.editor.registerNodeType("RenderNode", RenderNode);
 
     // add some nodes so the screen is not empty on startup
-    const node1 = this.addNodeWithCoordinates(MathNode, 100, 140);
-    const node2 = this.addNodeWithCoordinates(DisplayNode, 400, 140);
+    // const node1 = this.addNodeWithCoordinates(MathNode, 100, 140);
+    // const node2 = this.addNodeWithCoordinates(DisplayNode, 200, 140);
+    const node1 = this.addNodeWithCoordinates(CodeNode, 100, 140);
+    const node2 = this.addNodeWithCoordinates(RenderNode, 500, 140);
     this.editor.addConnection(
-      node1.getInterface("Result"),
-      node2.getInterface("Value")
+      node1.getInterface("Out"),
+      node2.getInterface("Code")
     );
     this.engine.calculate();
+
+    //Hydra
   },
   methods: {
     addNodeWithCoordinates(nodeType, x, y) {
@@ -95,7 +112,7 @@ export default {
   .dark-input,
   .dark-select > .__selected,
   .dark-select > .__dropdown,
-  .dark-num-input, {
+  .dark-num-input {
     background: #fff;
     color: #000;
     border: 1px solid #000;
