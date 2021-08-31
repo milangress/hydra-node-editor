@@ -1,6 +1,7 @@
 <template>
-  <div id="node-editor" style="height: 80vh; width: 100%">
+  <div id="node-editor" style="height: 100vh; width: 100%">
     <baklava-editor :plugin="viewPlugin" />
+    <BackgroundHydra></BackgroundHydra>
   </div>
 </template>
 
@@ -17,12 +18,14 @@ import { CodeNode } from "@/baklavajs-nodes/CodeNode";
 
 import RenderOption from "@/components/RenderOption.vue";
 import CodeOption from "@/components/CodeOption.vue";
+import BackgroundHydra from "@/components/BackgroundHydra.vue";
+
 
 /*import HydraSynth from 'hydra-synth';*/
 
 
 export default {
-  components: {},
+  components: {BackgroundHydra},
   data() {
     return {
       editor: new Editor(),
@@ -98,6 +101,22 @@ export default {
     transition: box-shadow 0.1s linear, filter 0.1s linear;
     resize: both;
   }
+  .node:hover {
+    box-shadow: none;
+    outline: 1px solid #000;
+    outline-offset: 2px;
+  }
+  .node.--selected {
+    box-shadow: none;
+    outline: 1px solid #000;
+    outline-offset: 5px;
+  }
+  .node-interface .__port {
+    width: 1rem;
+    height: 1rem;
+    background: white;
+    border: 1px solid #000;
+  }
 
   .node > .__title {
     border-radius: 0px;
@@ -110,9 +129,6 @@ export default {
     stroke: #000;
   }
 
-  .node-interface .__port {
-    background: #000 !important;
-  }
   .dark-input,
   .dark-select > .__selected,
   .dark-select > .__dropdown,
@@ -122,7 +138,15 @@ export default {
     border: 1px solid #000;
   }
   .--type-CodeNode {
-    width: 300px
+    width: 230px;
+    .__outputs,
+    .__inputs {
+      height: 1px;
+      color: transparent;
+    }
+    .__content > div > div {
+      margin: 0;
+    }
   }
 }
 </style>
