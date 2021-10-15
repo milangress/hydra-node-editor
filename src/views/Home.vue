@@ -90,7 +90,7 @@ export default {
     max-width: 20rem;
     background: rgba(255, 255, 255, 1);
     color: #000;
-    border-radius: 0;
+    border-radius: 0px;
     border: 1px solid #000;
     position: absolute;
     filter: none;
@@ -98,57 +98,51 @@ export default {
     transition: box-shadow 0.1s linear, filter 0.1s linear;
     resize: both;
   }
-
   .node:hover {
     box-shadow: none;
     outline: 1px solid #000;
     outline-offset: 2px;
   }
-
   .node.--selected {
     box-shadow: none;
     outline: 1px solid #000;
     outline-offset: 5px;
+  }
+  .node-interface .__port {
+    width: 1rem;
+    height: 1rem;
+    background: white;
+    border: 1px solid #000;
+  }
 
-    .node-interface .__port {
-      width: 1rem;
-      height: 1rem;
-      background: white;
-      border: 1px solid #000;
+  .node > .__title {
+    border-radius: 0px;
+    background: rgba(255, 255, 255, 1);
+    color: #000;
+    border-bottom: 1px solid #000;
+  }
+
+  .node-editor .connection {
+    stroke: #000;
+  }
+
+  .dark-input,
+  .dark-select > .__selected,
+  .dark-select > .__dropdown,
+  .dark-num-input {
+    background: #fff;
+    color: #000;
+    border: 1px solid #000;
+  }
+  .--type-CodeNode {
+    width: 230px;
+    .__outputs,
+    .__inputs {
+      height: 1px;
+      color: transparent;
     }
-
-    .node > .__title {
-      border-radius: 0;
-      background: rgba(255, 255, 255, 1);
-      color: #000;
-      border-bottom: 1px solid #000;
-    }
-
-    .node-editor .connection {
-      stroke: #000;
-    }
-
-    .dark-input,
-    .dark-select > .__selected,
-    .dark-select > .__dropdown,
-    .dark-num-input {
-      background: #fff;
-      color: #000;
-      border: 1px solid #000;
-    }
-
-    .--type-CodeNode {
-      width: 230px;
-
-      .__outputs,
-      .__inputs {
-        height: 1px;
-        color: transparent;
-      }
-
-      .__content > div > div {
-        margin: 0;
-      }
+    .__content > div > div {
+      margin: 0;
     }
   }
 }
