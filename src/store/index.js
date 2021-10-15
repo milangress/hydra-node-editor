@@ -4,8 +4,14 @@ import Vuex from "vuex";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {},
-  mutations: {},
+  state: {
+    currentHydraBackgroundString: "hydraInstance.osc()",
+  },
+  mutations: {
+    newHydraString (state, payload) {
+      state.currentHydraBackgroundString = payload.string;
+    }
+  },
   actions: {},
   modules: {},
 });

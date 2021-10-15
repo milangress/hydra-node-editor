@@ -1,5 +1,5 @@
 <template>
-  <div id="node-editor" style="height: 100vh; width: 100%;">
+  <div id="node-editor-wrapper" style="height: 100vh; width: 100%;">
     <baklava-editor :plugin="viewPlugin" />
     <BackgroundHydra></BackgroundHydra>
   </div>
@@ -15,10 +15,12 @@ import { Engine } from "@baklavajs/plugin-engine";
 import { RenderNode } from "@/baklavajs-nodes/RenderNode";
 import { TextNode } from "@/baklavajs-nodes/TextNode";
 import { CodeNode } from "@/baklavajs-nodes/CodeNode";
+import { RenderBackgroundNode } from "@/baklavajs-nodes/RenderBackgroundNode";
 
 import RenderOption from "@/components/RenderOption.vue";
 import CodeOption from "@/components/CodeOption.vue";
 import BackgroundHydra from "@/components/BackgroundHydra.vue";
+import sendToBgRenderOption from "@/components/SendBGRenderOption.vue";
 
 /*import HydraSynth from 'hydra-synth';*/
 
@@ -46,6 +48,7 @@ export default {
 
     this.viewPlugin.registerOption("RenderOption", RenderOption);
     this.viewPlugin.registerOption("CodeOption", CodeOption);
+    this.viewPlugin.registerOption("sendToBgRenderOption", sendToBgRenderOption);
 
     // register the nodes we have defined, so they can be
     // added by the user as well as saved & loaded.
@@ -54,12 +57,13 @@ export default {
     this.editor.registerNodeType("CodeNode", CodeNode);
     this.editor.registerNodeType("RenderNode", RenderNode);
     this.editor.registerNodeType("TextNode", TextNode);
+    this.editor.registerNodeType("RenderBackgroundNode", RenderBackgroundNode);
 
     // add some nodes so the screen is not empty on startup
     // const node1 = this.addNodeWithCoordinates(MathNode, 100, 140);
     this.addNodeWithCoordinates(TextNode, 200, 340);
     const node1 = this.addNodeWithCoordinates(CodeNode, 100, 140);
-    const node2 = this.addNodeWithCoordinates(RenderNode, 500, 140);
+    const node2 = this.addNodeWithCoordinates(RenderBackgroundNode, 500, 140);
     this.editor.addConnection(
       node1.getInterface("Out"),
       node2.getInterface("Code")
@@ -81,7 +85,17 @@ export default {
 </script>
 
 <style lang="scss">
-#node-editor {
+#node-editor-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+
+  .node-editor,
+  .hydraCanvasContainer {
+    grid-column: 1 / -1;
+    grid-row: 1 / -1;
+  }
+
   .node-editor .background {
     display: none;
   }
