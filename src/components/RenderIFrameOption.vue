@@ -1,7 +1,11 @@
 <template>
-  <div class="hydra-canvas-container" ref="hydraCanvasContainer">
+  <div
+    class="hydra-canvas-container"
+    ref="hydraCanvasContainer"
+    @click="canvasVisible = !canvasVisible"
+  >
     <iframe :src="currentIframeUrl" class="hydraIframe" scrolling="no"></iframe>
-    <p>{{ currentHydraCodeString }}</p>
+    <div class="hydra-text">{{ currentHydraCodeInfo }}</div>
   </div>
 </template>
 
@@ -14,7 +18,7 @@ export default {
     return {
       currentHydraCodeString: "default",
       currentHydraBase64CodeString: String,
-      hydra: false,
+      canvasVisible: true,
     };
   },
   mounted() {},
@@ -58,7 +62,12 @@ export default {
       return this.canvasWidth / 1.5;
     },
     currentIframeUrl: function () {
-      return `/iFrameGen/${this.currentHydraBase64CodeString}`;
+      return this.canvasVisible
+        ? `/iFrameGen/${this.currentHydraBase64CodeString}`
+        : "";
+    },
+    currentHydraCodeInfo: function () {
+      return this.canvasVisible ? this.currentHydraCodeString : "Paused";
     },
   },
   watch: {
@@ -68,7 +77,9 @@ export default {
       handler(val) {
         // this.currentHydraCodeString = this.cleanupReadable(val);
         this.currentHydraCodeString = this.cleanupReadable(val);
-        this.currentHydraBase64CodeString = this.encodeBase64(this.currentHydraCodeString);
+        this.currentHydraBase64CodeString = this.encodeBase64(
+          this.currentHydraCodeString
+        );
       },
     },
   },
@@ -76,8 +87,29 @@ export default {
 </script>
 
 <style scoped>
+
+.hydra-canvas-container:hover::before {
+  background-color: blue;
+  content: 'Start/Stop';
+  left: 0;
+  top: 30%;
+  position: fixed;
+  font-size: 2em;
+  z-index: 1;
+  color: white;
+  width: 100%;
+  display: inline-block;
+  mix-blend-mode: difference;
+}
+
 .hydraIframe {
   border: none;
   overflow: hidden;
+  background: black;
+  pointer-events: none;
+}
+
+.hydra-text {
+  text-align: left;
 }
 </style>

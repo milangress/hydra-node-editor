@@ -18,7 +18,7 @@ import { CodeNode } from "@/baklavajs-nodes/CodeNode";
 import { RenderBackgroundNode } from "@/baklavajs-nodes/RenderBackgroundNode";
 
 // import RenderOption from "@/components/RenderOption.vue";
-import RenderIFrameOption from "@/components/RenderIFrameOption"
+import RenderIFrameOption from "@/components/RenderIFrameOption";
 import CodeOption from "@/components/CodeOption.vue";
 import BackgroundHydra from "@/components/BackgroundHydra.vue";
 import sendToBgRenderOption from "@/components/SendBGRenderOption.vue";
@@ -59,7 +59,7 @@ export default {
       newNode.addInputInterface("In");
 
       const settingsWithNames = settings.inputs.map(function (input, index) {
-        const uniqueInputName = input.name + ( index + 1);
+        const uniqueInputName = input.name + (index + 1);
         const optionsMap = {
           float: "NumberOption",
           vec4: "InputOption",
@@ -87,9 +87,9 @@ export default {
         if (prevCode.length > 1) {
           prevCode = prevCode + ".";
         }
-        console.log(settingsWithNames)
+        console.log(settingsWithNames);
         const inputs = settingsWithNames.map(function (input) {
-          console.log(input.uid, input)
+          console.log(input.uid, input);
           return n.getInterface(input.uid).value;
         });
         let textureVec4;
@@ -111,7 +111,7 @@ export default {
       return {
         newNode: newNode,
         ...settings,
-      }
+      };
     };
 
     const _that = this;
@@ -158,11 +158,11 @@ export default {
     // add some nodes so the screen is not empty on startup
     // const node1 = this.addNodeWithCoordinates(MathNode, 100, 140);
     // this.addNodeWithCoordinates(TextNode, 200, 340);
-    // const node1 = this.addNodeWithCoordinates(CodeNode, 100, 140);
-    const node2 = this.addNodeWithCoordinates(RenderBackgroundNode, 600, 140);
+    const node1 = this.addNodeWithCoordinates(RenderNode, 400, 240);
+    this.addNodeWithCoordinates(RenderBackgroundNode, 600, 140);
     this.editor.addConnection(
       defaultNode.getInterface("Out"),
-      node2.getInterface("Code")
+        node1.getInterface("Code")
     );
     // console.log(node2, defaultNode);
     this.engine.calculate();
@@ -222,9 +222,9 @@ export default {
   // .connection {
   //   filter: contrast(100%);
   // }
-  .__title {
-    filter: blur(0.1px) brightness(99%) grayscale(100%) contrast(5000%);
-  }
+  //.__title {
+  //  filter: blur(0.1px) brightness(99%) grayscale(100%) contrast(5000%);
+  //}
 
   .node > .__content {
     padding: 0 0.5em;
@@ -268,6 +268,7 @@ export default {
     span {
       //text-shadow: 3px 3px 0 3px black,6px 6px 0 6px white;
       // text-transform: uppercase;
+      filter: blur(0.1px) brightness(99%) grayscale(100%) contrast(5000%);
       color: black;
       -webkit-text-stroke: 1px white;
       display: inline-block;
@@ -276,6 +277,17 @@ export default {
 
     .dark-context-menu {
       font-size: initial;
+      filter: none;
+      z-index: 1000;
+    }
+    .dark-context-menu>.item {
+      background: white;
+      border: 1px solid #000;
+      color: black;
+    }
+    .dark-context-menu .item:hover {
+      background: black;
+      color: white;
     }
 
     input.dark-input {
@@ -348,6 +360,23 @@ export default {
     .__inputs .--input:nth-of-type(1) {
       //padding-top: 0;
       margin-top: 0;
+    }
+  }
+
+  .--type-RenderNode {
+    .hydra-canvas-container {
+      margin: 0 !important;
+    }
+    .node-option {
+      margin: 0;
+    }
+    .__content {
+      padding: 0;
+    }
+    .__content>.__options {
+      grid-column: 1 / -1;
+      grid-row: 1 / -1;
+      z-index: 2;
     }
   }
 }
