@@ -32,8 +32,13 @@ export default {
       // eval(finalCodeString)
     },
     cleanupReadable: function (code) {
-      return code.replaceAll(/\.hydraInstance/gm, '')
-          .replaceAll(/hydraInstance/gm, '');
+      try {
+        return code
+          .replaceAll(/\.hydraInstance/gm, "")
+          .replaceAll(/hydraInstance/gm, "");
+      } catch (err) {
+        console.log('No Content Available: ',err);
+      }
     },
   },
   computed: {},

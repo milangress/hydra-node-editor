@@ -40,20 +40,26 @@ export default {
   },
   methods: {
     cleanup: function (code, hydraInstance = "this.hydra.synth") {
-      //const codestring = `this.hydra.synth.${code.toString()}.out()`
-      const codestring = code
-        .toString()
-        .replaceAll(/(?<!hydraInstance.)osc/gm, "hydraInstance.osc")
-        .replaceAll(/\.hydraInstance/gm, hydraInstance)
-        .replaceAll(/hydraInstance/gm, hydraInstance);
-      const finalCodeString = codestring + ".out()";
-      // console.log("Hydra eval: ", finalCodeString);
-      return finalCodeString;
-      // eval(finalCodeString)
+      if (code != null) {
+        //const codestring = `this.hydra.synth.${code.toString()}.out()`
+        const codestring = code
+          .toString()
+          .replaceAll(/(?<!hydraInstance.)osc/gm, "hydraInstance.osc")
+          .replaceAll(/\.hydraInstance/gm, hydraInstance)
+          .replaceAll(/hydraInstance/gm, hydraInstance);
+        const finalCodeString = codestring + ".out()";
+        // console.log("Hydra eval: ", finalCodeString);
+        return finalCodeString;
+        // eval(finalCodeString)
+      } else return "";
     },
     cleanupReadable: function (code) {
-      return code.replaceAll(/\.hydraInstance/gm, '')
-          .replaceAll(/hydraInstance/gm, '');
+      if (code != null) {
+        return code
+          .toString()
+          .replaceAll(/\.hydraInstance/gm, "")
+          .replaceAll(/hydraInstance/gm, "");
+      } else return "";
     },
   },
   mounted() {
@@ -65,6 +71,7 @@ export default {
       enableStreamCapture: false,
     });
     console.log(this.hydra);
+    this.hydra.synth.osc(60, 0.1).diff(this.hydra.synth.osc(60, 0.1)).out();
     //this.hydra.synth.osc(50, 0.1, 1.5).out();
     // this.hydra.synth.osc(50, 0.1, 1.5).out();
   },
@@ -118,6 +125,5 @@ export default {
 .hideBG.canvasHidden:hover {
   background-size: 200% 200%;
   filter: blur(0);
-
 }
 </style>

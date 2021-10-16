@@ -50,8 +50,6 @@ export default {
     this.editor.use(this.engine);
 
     const HydraNodeFactory = function (settings) {
-      console.log(settings);
-
       let newNode = new NodeBuilder("HydraNode", {
         twoColumn: true,
         width: "50px",
@@ -62,29 +60,38 @@ export default {
       settings.inputs.forEach(function (input) {
         const optionsMap = {
           float: "NumberOption",
+          vec4: "TextOption",
         };
         let nodeOptions = optionsMap[input.type];
         if (nodeOptions) {
           newNode.addInputInterface(input.name, nodeOptions, input.default);
-        } else console.error(input);
+        } else console.error(input.type);
       });
       // .addInputInterface("Number 1", "NumberOption", 1)
       // .addInputInterface("Number 2", "NumberOption", 10)
-      // .addOption("Operation", "SelectOption", "Add", undefined, {
-      //   items: ["Add", "Subtract"],
-      // })
+      if (settings.type === "combine" || settings.type === "combineCoord") {
+        newNode.addInputInterface("texture", "textOption", "");
+      }
 
       newNode.addOutputInterface("Output");
       newNode.onCalculate((n) => {
-        let prevCode = n.getInterface("Code").value ?? '';
+        let prevCode = n.getInterface("Code").value ?? "";
         if (prevCode.length > 1) {
-          prevCode = prevCode + '.'
+          prevCode = prevCode + ".";
         }
         // console.log('prevCode', prevCode)
         const inputs = settings.inputs.map(function (input) {
           return n.getInterface(input.name).value;
         });
-        const inputString = inputs.join(",");
+        let textureVec4;
+        if (settings.type === "combine" || settings.type === "combineCoord") {
+          let code = n.getInterface("Code").value ?? "";
+          if (code.length > 1) {
+            textureVec4 = code;
+          }
+        }
+        const mergeTexture = [textureVec4, ...inputs].filter((n) => n);
+        const inputString = mergeTexture.join(",");
         const hydraInstance = settings.type === "src" ? "hydraInstance." : "";
         const result = `${hydraInstance}${settings.name}(${inputString})`;
         // console.log(settings.name, result);
@@ -97,21 +104,20 @@ export default {
 
     const _that = this;
 
-    let defaultNode
+    let defaultNode;
 
     const hydraNodes = glslFunctions.map(function (settings) {
       const NodeConstructor = HydraNodeFactory(settings);
       const buildNode = NodeConstructor.build();
-      console.log(_that.editor);
       _that.editor.registerNodeType(settings.name, buildNode, settings.type);
       // console.log(settings);
       if (settings.name === "osc") {
         defaultNode = _that.addNodeWithCoordinates(buildNode, 200, 140);
       }
-      return buildNode
+      return buildNode;
     });
 
-    console.log('all Nodes', hydraNodes)
+    console.log("all Nodes", hydraNodes);
 
     // Show a minimap in the top right corner
     this.viewPlugin.enableMinimap = false;
@@ -137,10 +143,11 @@ export default {
     // this.addNodeWithCoordinates(TextNode, 200, 340);
     // const node1 = this.addNodeWithCoordinates(CodeNode, 100, 140);
     const node2 = this.addNodeWithCoordinates(RenderBackgroundNode, 600, 140);
-    this.editor.addConnection(
-        defaultNode.getInterface("Output"),
-      node2.getInterface("Code")
-    );
+    // this.editor.addConnection(
+    //   defaultNode.getInterface("Output"),
+    //   node2.getInterface("Code")
+    // );
+    console.log(node2, defaultNode)
     this.engine.calculate();
 
     //Hydra
@@ -221,10 +228,10 @@ export default {
     color: #000;
     border: 1px solid #000;
 
-    >.__content:hover {
+    > .__content:hover {
       background-color: unset;
     }
-    >.__button path {
+    > .__button path {
       stroke: #000;
       fill: #000;
     }
@@ -241,7 +248,7 @@ export default {
     }
   }
 
-  .node.--two-column>.__content {
+  .node.--two-column > .__content {
     grid-template-columns: auto;
   }
 }
