@@ -1,21 +1,36 @@
 <template>
-  <div>
-    <p>{{ currentHydraCodeString }}</p>
+  <div @click="toggleHeight = !toggleHeight">
+    <!--    <CodeOption :value="currentHydraCodeString" :readonly="true"></CodeOption>-->
+    <!--    <p>{{ currentHydraCodeString }}</p>-->
+    <prism-editor
+      class="my-editor, input-user-select"
+      v-model="readableHydraString"
+      :highlight="highlighter"
+      line-numbers
+      v-bind:readonly="true"
+      :style="toggleHeightStyle"
+    ></prism-editor>
   </div>
 </template>
 
 <script>
-/*import { Editor } from "@baklavajs/core";
-import { ViewPlugin } from "@baklavajs/plugin-renderer-vue";
-import { Engine } from "@baklavajs/plugin-engine";*/
+import { PrismEditor } from "vue-prism-editor";
+import "vue-prism-editor/dist/prismeditor.min.css"; // import the styles somewhere
+
+// import highlighting library (you can use any library you want just return html string)
+import { highlight, languages } from "prismjs/components/prism-core";
+import "prismjs/components/prism-clike";
+import "prismjs/components/prism-javascript";
+import "prismjs/themes/prism-tomorrow.css"; // import syntax highlighting styles
 
 export default {
-  components: {},
+  components: { PrismEditor },
   name: "SendBGRenderOption",
   props: ["name", "value"],
   data() {
     return {
       currentHydraCodeString: "default",
+      toggleHeight: true,
     };
   },
   mounted() {},
@@ -35,13 +50,26 @@ export default {
       try {
         return code
           .replaceAll(/\.hydraInstance/gm, "")
-          .replaceAll(/hydraInstance/gm, "");
+          .replaceAll(/hydraInstance/gm, "")
+          .replaceAll(").", ")\n.");
       } catch (err) {
-        console.log('No Content Available: ',err);
+        console.log("No Content Available: ", err);
+      }
+    },
+    highlighter(code) {
+      return highlight(code, languages.js, "markup"); // languages.<insert language> to return html with markup
+    },
+  },
+  computed: {
+    readableHydraString: function () {
+      return this.toggleHeight ? "Expand" : this.cleanupReadable(this.value);
+    },
+    toggleHeightStyle: function (){
+      return {
+        maxHeight: this.toggleHeight ? "0.8rem" : "50rem",
       }
     },
   },
-  computed: {},
   watch: {
     value: {
       // the callback will be called immediately after the start of the observation
@@ -58,4 +86,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.my-editor {
+  transition: max-height 0.3s ease-in-out;
+}
+</style>
