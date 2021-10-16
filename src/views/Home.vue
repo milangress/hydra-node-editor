@@ -31,6 +31,8 @@ import { NodeBuilder } from "@baklavajs/core";
 
 import glslFunctions from "hydra-synth/src/glsl/glsl-functions";
 
+import MyNode from "@/components/baklavaOverwrites/MyNode"
+
 export default {
   components: { BackgroundHydra },
   data() {
@@ -49,6 +51,9 @@ export default {
     // The engine plugin calculates the nodes in the graph in the
     // correct order using the "calculate" methods of the nodes
     this.editor.use(this.engine);
+
+    this.viewPlugin.components.node = MyNode;
+
 
     const HydraNodeFactory = function (settings) {
       let newNode = new NodeBuilder("HydraNode", {

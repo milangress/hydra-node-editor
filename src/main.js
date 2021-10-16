@@ -4,7 +4,6 @@ import "./registerServiceWorker";
 import router from "./router";
 import store from "./store";
 
-
 Vue.config.productionTip = false;
 
 import { BaklavaVuePlugin } from "@baklavajs/plugin-renderer-vue";
@@ -12,6 +11,10 @@ import "@baklavajs/plugin-renderer-vue/dist/styles.css";
 // import "@/css/baklavaOverwrites.css";
 
 Vue.use(BaklavaVuePlugin);
+
+import vClickOutside from "v-click-outside";
+
+Vue.use(vClickOutside);
 
 new Vue({
   router,
