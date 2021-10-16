@@ -51,7 +51,7 @@ export default {
 
     const HydraNodeFactory = function (settings) {
       let newNode = new NodeBuilder("HydraNode", {
-        twoColumn: true,
+        twoColumn: false,
         width: "50px",
       }).setName(settings.name);
 
@@ -81,13 +81,16 @@ export default {
         }
         // console.log('prevCode', prevCode)
         const inputs = settings.inputs.map(function (input) {
+          if (input.name === "Color") {
+            debugger;
+          }
           return n.getInterface(input.name).value;
         });
         let textureVec4;
         if (settings.type === "combine" || settings.type === "combineCoord") {
-          let code = n.getInterface("Code").value ?? "";
-          if (code.length > 1) {
-            textureVec4 = code;
+          let texture = n.getInterface("texture").value ?? "";
+          if (texture.length > 1) {
+            textureVec4 = texture;
           }
         }
         const mergeTexture = [textureVec4, ...inputs].filter((n) => n);
@@ -143,11 +146,11 @@ export default {
     // this.addNodeWithCoordinates(TextNode, 200, 340);
     // const node1 = this.addNodeWithCoordinates(CodeNode, 100, 140);
     const node2 = this.addNodeWithCoordinates(RenderBackgroundNode, 600, 140);
-    // this.editor.addConnection(
-    //   defaultNode.getInterface("Output"),
-    //   node2.getInterface("Code")
-    // );
-    console.log(node2, defaultNode)
+    this.editor.addConnection(
+      defaultNode.getInterface("Out"),
+      node2.getInterface("Code")
+    );
+    // console.log(node2, defaultNode);
     this.engine.calculate();
 
     //Hydra
@@ -170,6 +173,10 @@ export default {
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
 
+  .node-editor {
+    font-family: "Arial Narrow", Arial, sans-serif;
+  }
+
   .node-editor,
   .hydraCanvasContainer {
     grid-column: 1 / -1;
@@ -180,23 +187,35 @@ export default {
     display: none;
   }
 
-  .node-editor .node {
+  .node {
     max-width: 20rem;
     background: rgba(255, 255, 255, 1);
     color: #000;
     border-radius: 0px;
     border: 1px solid #000;
     position: absolute;
-    filter: none;
+    // filter: none;
     //filter: drop-shadow(0 0 3px rgba(0,0,0,0.8));
     transition: box-shadow 0.1s linear, filter 0.1s linear;
     resize: both;
+    box-shadow: 4px 4px 0 0 rgb(0 0 0 / 10%);
   }
   .node:hover {
-    box-shadow: none;
     outline: 1px solid #000;
     outline-offset: 2px;
   }
+  // .node-editor .node,
+  // .connection {
+  //   filter: contrast(100%);
+  // }
+  //.__title {
+  //  filter: blur(0.1px) brightness(99%) grayscale(100%) contrast(5000%);
+  //}
+
+  .node > .__content {
+    padding: 0 0.5em;
+  }
+
   .node.--selected {
     box-shadow: none;
     outline: 1px solid #000;
@@ -207,17 +226,65 @@ export default {
     height: 1rem;
     background: white;
     border: 1px solid #000;
+    top: calc(50% - 0.5rem);
+  }
+  .node-interface .__port:hover {
+    background: rgba(0, 0, 0, 1);
+  }
+  .node-interface.--connected > .__port {
+    background: blue;
   }
 
   .node > .__title {
-    border-radius: 0px;
-    background: rgba(255, 255, 255, 1);
-    color: #000;
+    border-radius: 0;
+    // background: rgba(255, 255, 255, 1);
+    // color: #000;
     border-bottom: 1px solid #000;
+    font-weight: bold;
+    font-size: 1.5em;
+    max-height: 1em;
+    overflow: hidden;
+    padding: 0;
+    background: #000;
+    color: white;
+
+    span {
+      //text-shadow: 3px 3px 0 3px black,6px 6px 0 6px white;
+      // text-transform: uppercase;
+      color: black;
+      -webkit-text-stroke: 1px white;
+      display: inline-block;
+      transform: scale(1.1);
+    }
+
+    .dark-context-menu {
+      font-size: initial;
+    }
+
+    input.dark-input {
+      max-width: 33%;
+      font-size: 1rem;
+      padding: 0 0;
+      text-align: center;
+      z-index: 1000;
+      color: #000;
+      position: fixed;
+      transform: scale(2);
+      left: 33%;
+      right: 0;
+    }
   }
 
   .node-editor .connection {
     stroke: #000;
+    stroke-width: 5px;
+    fill: none;
+    stroke-linecap: round;
+    filter: drop-shadow(3px 5px 2px rgb(265 265 265 / 0.4));
+  }
+
+  .node > .__content > div > div {
+    margin: 0.25em;
   }
 
   .dark-input,
@@ -237,7 +304,8 @@ export default {
     }
   }
   .--type-CodeNode {
-    width: 230px;
+    //width: 230px;
+    max-width: 40rem;
     .__outputs,
     .__inputs {
       height: 1px;
@@ -251,5 +319,21 @@ export default {
   .node.--two-column > .__content {
     grid-template-columns: auto;
   }
+  .--type-HydraNode {
+    .__outputs {
+      max-height: 1px;
+      .__output {
+        margin: 0;
+        transform: translateY(0.25em);
+      }
+    }
+    .__inputs .--input:nth-of-type(1) {
+      //padding-top: 0;
+      margin-top: 0;
+    }
+  }
+}
+.node-interface {
+  padding: 0 0.1em 0;
 }
 </style>

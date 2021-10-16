@@ -95,6 +95,13 @@ export default {
   position: absolute;
   bottom: 50px;
   left: 50px;
+  max-width: 50vw;
+  max-height: 30vh;
+  font-size: 3em;
+  background-color: white;
+  -webkit-text-stroke: 1.1px #000;
+  filter: blur(0.1px) brightness(99%) grayscale(100%) contrast(5000%);
+  mix-blend-mode: exclusion;
 }
 
 .hideBG {
