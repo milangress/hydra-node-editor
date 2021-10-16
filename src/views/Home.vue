@@ -35,6 +35,7 @@ import MyNode from "@/components/baklavaOverwrites/MyNode"
 
 export default {
   components: { BackgroundHydra },
+  name: "Home",
   data() {
     return {
       editor: new Editor(),
