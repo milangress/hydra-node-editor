@@ -19,10 +19,10 @@ export default {
   computed: {
     hydraString() {
       const hydraString = this.$store.state.currentHydraBackgroundString;
-      const cleanedUp = this.cleanup(hydraString);
+      const cleanedUp = this.cleanup(hydraString.raw);
       console.log("BG EVAL: ", cleanedUp);
       if (this.hydra) {
-        console.log(this.hydra)
+        console.log(this.hydra);
         eval(cleanedUp);
       }
       return cleanedUp;
@@ -34,6 +34,7 @@ export default {
       const codestring = code
         .toString()
         .replaceAll(/(?<!hydraInstance.)osc/gm, "hydraInstance.osc")
+        .replaceAll(/\.hydraInstance/gm, hydraInstance)
         .replaceAll(/hydraInstance/gm, hydraInstance);
       const finalCodeString = codestring + ".out()";
       // console.log("Hydra eval: ", finalCodeString);

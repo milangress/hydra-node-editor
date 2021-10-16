@@ -1,6 +1,6 @@
 <template>
   <div>
-<!--    <p>{{ currentHydraCodeString }}</p>-->
+    <p>{{ currentHydraCodeString }}</p>
   </div>
 </template>
 

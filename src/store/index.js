@@ -5,12 +5,15 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    currentHydraBackgroundString: "hydraInstance.osc()",
+    currentHydraBackgroundString: {
+      raw: "hydraInstance.osc()",
+    },
   },
   mutations: {
-    newHydraString (state, payload) {
-      state.currentHydraBackgroundString = payload.string;
-    }
+    newHydraString(state, payload) {
+      Vue.set(state.currentHydraBackgroundString, "raw", payload.string);
+      // state.currentHydraBackgroundString = payload.string;
+    },
   },
   actions: {},
   modules: {},

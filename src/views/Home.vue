@@ -1,5 +1,5 @@
 <template>
-  <div id="node-editor-wrapper" style="height: 100vh; width: 100%;">
+  <div id="node-editor-wrapper" style="height: 100vh; width: 100%">
     <baklava-editor :plugin="viewPlugin" />
     <BackgroundHydra></BackgroundHydra>
   </div>
@@ -24,6 +24,12 @@ import sendToBgRenderOption from "@/components/SendBGRenderOption.vue";
 
 /*import HydraSynth from 'hydra-synth';*/
 
+// import { HydraNodeFactory } from "@/baklavajs-nodes/generatorFactoryHydraNodes";
+
+import { NodeBuilder } from "@baklavajs/core";
+
+import glslFunctions from "hydra-synth/src/glsl/glsl-functions";
+
 export default {
   components: { BackgroundHydra },
   data() {
@@ -43,12 +49,71 @@ export default {
     // correct order using the "calculate" methods of the nodes
     this.editor.use(this.engine);
 
+    const HydraNodeFactory = function (settings) {
+      console.log(settings);
+
+      let newNode = new NodeBuilder("HydraNode", {
+        twoColumn: true,
+        width: "300px",
+      }).setName(settings.name);
+
+      newNode.addInputInterface("Code");
+
+      settings.inputs.forEach(function (input) {
+        const optionsMap = {
+          float: "NumberOption",
+        };
+        let nodeOptions = optionsMap[input.type];
+        if (nodeOptions) {
+          newNode.addInputInterface(input.name, nodeOptions, input.default);
+        } else console.error(input);
+      });
+      // .addInputInterface("Number 1", "NumberOption", 1)
+      // .addInputInterface("Number 2", "NumberOption", 10)
+      // .addOption("Operation", "SelectOption", "Add", undefined, {
+      //   items: ["Add", "Subtract"],
+      // })
+
+      newNode.addOutputInterface("Output");
+      newNode.onCalculate((n) => {
+        let prevCode = n.getInterface("Code").value ?? '';
+        if (prevCode.length > 1) {
+          prevCode = prevCode + '.'
+        }
+        console.log('prevCode', prevCode)
+        const inputs = settings.inputs.map(function (input) {
+          return n.getInterface(input.name).value;
+        });
+        const inputString = inputs.join(",");
+        const hydraInstance = settings.type === "src" ? "hydraInstance." : "";
+        const result = `${hydraInstance}${settings.name}(${inputString})`;
+        console.log(settings.name, result);
+        n.getInterface("Output").value = prevCode + result;
+      });
+      //newNode.build();
+
+      return newNode;
+    };
+
+    const _that = this;
+
+    glslFunctions.forEach(function (settings) {
+      const NodeConstructor = HydraNodeFactory(settings);
+      const buildNode = NodeConstructor.build();
+      console.log(_that.editor);
+      _that.editor.registerNodeType(settings.name, buildNode, settings.type);
+      // console.log(settings);
+    });
+
     // Show a minimap in the top right corner
-    this.viewPlugin.enableMinimap = true;
+    this.viewPlugin.enableMinimap = false;
 
     this.viewPlugin.registerOption("RenderOption", RenderOption);
     this.viewPlugin.registerOption("CodeOption", CodeOption);
-    this.viewPlugin.registerOption("sendToBgRenderOption", sendToBgRenderOption);
+    this.viewPlugin.registerOption(
+      "sendToBgRenderOption",
+      sendToBgRenderOption
+    );
 
     // register the nodes we have defined, so they can be
     // added by the user as well as saved & loaded.
