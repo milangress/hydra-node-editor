@@ -33,20 +33,25 @@ export default {
       console.log("BG EVAL: ", cleanedUp);
       if (this.hydra) {
         console.log(this.hydra);
-        eval(cleanedUp);
+        try {
+          eval(cleanedUp);
+        } catch (err) {
+          console.error("Hydra Eval Failed", err);
+        }
       }
       return this.cleanupReadable(hydraString.raw);
     },
   },
   methods: {
-    cleanup: function (code, hydraInstance = "this.hydra.synth") {
+    cleanup: function (code) {
+      // hydraInstance = "this.hydra.synth"
       if (code != null) {
         //const codestring = `this.hydra.synth.${code.toString()}.out()`
-        const codestring = code
-          .toString()
-          .replaceAll(/(?<!hydraInstance.)osc/gm, "hydraInstance.osc")
-          .replaceAll(/\.hydraInstance/gm, hydraInstance)
-          .replaceAll(/hydraInstance/gm, hydraInstance);
+        const codestring = code.toString()
+            .replaceAll('hydraInstance.', '')
+        // .replaceAll(/(?<!hydraInstance.)osc/gm, "hydraInstance.osc")
+        // .replaceAll(/\.hydraInstance/gm, hydraInstance)
+        // .replaceAll(/hydraInstance/gm, hydraInstance);
         const finalCodeString = codestring + ".out()";
         // console.log("Hydra eval: ", finalCodeString);
         return finalCodeString;
@@ -58,7 +63,8 @@ export default {
         return code
           .toString()
           .replaceAll(/\.hydraInstance/gm, "")
-          .replaceAll(/hydraInstance/gm, "");
+          .replaceAll(/hydraInstance/gm, "")
+          .replaceAll(',', ', ')
       } else return "";
     },
   },
@@ -66,12 +72,12 @@ export default {
     this.hydra = new Hydra({
       canvas: this.$refs.hydraCanvas,
       autoLoop: true,
-      makeGlobal: false,
+      makeGlobal: true,
       detectAudio: false,
       enableStreamCapture: false,
     });
     console.log(this.hydra);
-    this.hydra.synth.osc(60, 0.1).diff(this.hydra.synth.osc(60, 0.1)).out();
+    // this.hydra.synth.osc(60, 0.1).diff(this.hydra.synth.osc(60, 0.1)).out();
     //this.hydra.synth.osc(50, 0.1, 1.5).out();
     // this.hydra.synth.osc(50, 0.1, 1.5).out();
   },
@@ -93,15 +99,16 @@ export default {
 
 .hydra-String {
   position: absolute;
+  text-align: left;
   bottom: 50px;
   left: 50px;
   max-width: 50vw;
-  max-height: 30vh;
+  max-height: 60vh;
   font-size: 3em;
   background-color: white;
   -webkit-text-stroke: 1.1px #000;
   filter: blur(0.1px) brightness(99%) grayscale(100%) contrast(5000%);
-  mix-blend-mode: exclusion;
+  mix-blend-mode: multiply;
 }
 
 .hideBG {

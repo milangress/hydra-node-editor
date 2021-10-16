@@ -57,15 +57,22 @@ export default {
 
       newNode.addInputInterface("In");
 
-      settings.inputs.forEach(function (input) {
+      const settingsWithNames = settings.inputs.map(function (input, index) {
+        const uniqueInputName = input.name + index;
         const optionsMap = {
           float: "NumberOption",
-          vec4: "TextOption",
+          vec4: "InputOption",
+          sampler2D: "InputOption",
         };
-        let nodeOptions = optionsMap[input.type];
-        if (nodeOptions) {
-          newNode.addInputInterface(input.name, nodeOptions, input.default);
+        let nodeOption = optionsMap[input.type];
+        if (nodeOption) {
+          newNode.addInputInterface(uniqueInputName, nodeOption, input.default);
         } else console.error(input.type);
+        return {
+          ...input,
+          uid: uniqueInputName,
+          nodeOption: nodeOption,
+        };
       });
       // .addInputInterface("Number 1", "NumberOption", 1)
       // .addInputInterface("Number 2", "NumberOption", 10)
@@ -79,12 +86,10 @@ export default {
         if (prevCode.length > 1) {
           prevCode = prevCode + ".";
         }
-        // console.log('prevCode', prevCode)
-        const inputs = settings.inputs.map(function (input) {
-          if (input.name === "Color") {
-            debugger;
-          }
-          return n.getInterface(input.name).value;
+        console.log(settingsWithNames)
+        const inputs = settingsWithNames.map(function (input) {
+          console.log(input.uid, input)
+          return n.getInterface(input.uid).value;
         });
         let textureVec4;
         if (settings.type === "combine" || settings.type === "combineCoord") {
@@ -102,22 +107,30 @@ export default {
       });
       //newNode.build();
 
-      return newNode;
+      return {
+        newNode: newNode,
+        ...settings,
+      }
     };
 
     const _that = this;
 
     let defaultNode;
 
-    const hydraNodes = glslFunctions.map(function (settings) {
+    const localCopyGlsl = JSON.parse(JSON.stringify(glslFunctions));
+
+    const hydraNodes = localCopyGlsl.map(function (settings) {
       const NodeConstructor = HydraNodeFactory(settings);
-      const buildNode = NodeConstructor.build();
+      const buildNode = NodeConstructor.newNode.build();
       _that.editor.registerNodeType(settings.name, buildNode, settings.type);
       // console.log(settings);
       if (settings.name === "osc") {
         defaultNode = _that.addNodeWithCoordinates(buildNode, 200, 140);
       }
-      return buildNode;
+      return {
+        ...NodeConstructor.settings,
+        newNode: buildNode,
+      };
     });
 
     console.log("all Nodes", hydraNodes);
