@@ -58,7 +58,7 @@ export default {
       newNode.addInputInterface("In");
 
       const settingsWithNames = settings.inputs.map(function (input, index) {
-        const uniqueInputName = input.name + index;
+        const uniqueInputName = input.name + ( index + 1);
         const optionsMap = {
           float: "NumberOption",
           vec4: "InputOption",
@@ -221,9 +221,9 @@ export default {
   // .connection {
   //   filter: contrast(100%);
   // }
-  //.__title {
-  //  filter: blur(0.1px) brightness(99%) grayscale(100%) contrast(5000%);
-  //}
+  .__title {
+    filter: blur(0.1px) brightness(99%) grayscale(100%) contrast(5000%);
+  }
 
   .node > .__content {
     padding: 0 0.5em;
@@ -240,12 +240,15 @@ export default {
     background: white;
     border: 1px solid #000;
     top: calc(50% - 0.5rem);
+    transition: all 0.1s ease-in-out;
   }
   .node-interface .__port:hover {
     background: rgba(0, 0, 0, 1);
+    transform: scale(2);
   }
   .node-interface.--connected > .__port {
     background: blue;
+    transform: scale(1.2);
   }
 
   .node > .__title {
