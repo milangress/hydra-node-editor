@@ -54,7 +54,7 @@ export default {
 
       let newNode = new NodeBuilder("HydraNode", {
         twoColumn: true,
-        width: "300px",
+        width: "50px",
       }).setName(settings.name);
 
       newNode.addInputInterface("Code");
@@ -80,14 +80,14 @@ export default {
         if (prevCode.length > 1) {
           prevCode = prevCode + '.'
         }
-        console.log('prevCode', prevCode)
+        // console.log('prevCode', prevCode)
         const inputs = settings.inputs.map(function (input) {
           return n.getInterface(input.name).value;
         });
         const inputString = inputs.join(",");
         const hydraInstance = settings.type === "src" ? "hydraInstance." : "";
         const result = `${hydraInstance}${settings.name}(${inputString})`;
-        console.log(settings.name, result);
+        // console.log(settings.name, result);
         n.getInterface("Output").value = prevCode + result;
       });
       //newNode.build();
@@ -97,13 +97,21 @@ export default {
 
     const _that = this;
 
-    glslFunctions.forEach(function (settings) {
+    let defaultNode
+
+    const hydraNodes = glslFunctions.map(function (settings) {
       const NodeConstructor = HydraNodeFactory(settings);
       const buildNode = NodeConstructor.build();
       console.log(_that.editor);
       _that.editor.registerNodeType(settings.name, buildNode, settings.type);
       // console.log(settings);
+      if (settings.name === "osc") {
+        defaultNode = _that.addNodeWithCoordinates(buildNode, 200, 140);
+      }
+      return buildNode
     });
+
+    console.log('all Nodes', hydraNodes)
 
     // Show a minimap in the top right corner
     this.viewPlugin.enableMinimap = false;
@@ -126,11 +134,11 @@ export default {
 
     // add some nodes so the screen is not empty on startup
     // const node1 = this.addNodeWithCoordinates(MathNode, 100, 140);
-    this.addNodeWithCoordinates(TextNode, 200, 340);
-    const node1 = this.addNodeWithCoordinates(CodeNode, 100, 140);
-    const node2 = this.addNodeWithCoordinates(RenderBackgroundNode, 500, 140);
+    // this.addNodeWithCoordinates(TextNode, 200, 340);
+    // const node1 = this.addNodeWithCoordinates(CodeNode, 100, 140);
+    const node2 = this.addNodeWithCoordinates(RenderBackgroundNode, 600, 140);
     this.editor.addConnection(
-      node1.getInterface("Out"),
+        defaultNode.getInterface("Output"),
       node2.getInterface("Code")
     );
     this.engine.calculate();
@@ -212,6 +220,14 @@ export default {
     background: #fff;
     color: #000;
     border: 1px solid #000;
+
+    >.__content:hover {
+      background-color: unset;
+    }
+    >.__button path {
+      stroke: #000;
+      fill: #000;
+    }
   }
   .--type-CodeNode {
     width: 230px;
@@ -223,6 +239,10 @@ export default {
     .__content > div > div {
       margin: 0;
     }
+  }
+
+  .node.--two-column>.__content {
+    grid-template-columns: auto;
   }
 }
 </style>

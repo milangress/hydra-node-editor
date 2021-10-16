@@ -31,6 +31,10 @@ export default {
       return finalCodeString;
       // eval(finalCodeString)
     },
+    cleanupReadable: function (code) {
+      return code.replaceAll(/\.hydraInstance/gm, '')
+          .replaceAll(/hydraInstance/gm, '');
+    },
   },
   computed: {},
   watch: {
@@ -42,7 +46,7 @@ export default {
           type: "newHydraString",
           string: val,
         });
-        this.currentHydraCodeString = this.cleanup(val);
+        this.currentHydraCodeString = this.cleanupReadable(val);
       },
     },
   },

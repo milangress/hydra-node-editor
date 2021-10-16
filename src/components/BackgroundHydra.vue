@@ -1,7 +1,16 @@
 <template>
   <div class="hydra-canvas-container" ref="hydraCanvasContainer">
-    <canvas class="hydra-canvas" ref="hydraCanvas"></canvas>
+    <canvas
+      class="hydra-canvas"
+      ref="hydraCanvas"
+      v-show="canvasVisible"
+    ></canvas>
     <div class="hydra-String">{{ hydraString }}</div>
+    <div
+      class="hideBG"
+      @click="canvasVisible = !canvasVisible"
+      :class="{ canvasHidden: canvasVisible }"
+    ></div>
   </div>
 </template>
 
@@ -14,6 +23,7 @@ export default {
     return {
       currentHydraCodeString: "default",
       hydra: false,
+      canvasVisible: true,
     };
   },
   computed: {
@@ -25,7 +35,7 @@ export default {
         console.log(this.hydra);
         eval(cleanedUp);
       }
-      return cleanedUp;
+      return this.cleanupReadable(hydraString.raw);
     },
   },
   methods: {
@@ -41,6 +51,10 @@ export default {
       return finalCodeString;
       // eval(finalCodeString)
     },
+    cleanupReadable: function (code) {
+      return code.replaceAll(/\.hydraInstance/gm, '')
+          .replaceAll(/hydraInstance/gm, '');
+    },
   },
   mounted() {
     this.hydra = new Hydra({
@@ -51,8 +65,8 @@ export default {
       enableStreamCapture: false,
     });
     console.log(this.hydra);
-    this.hydra.synth.osc(50, 0.1, 1.5).out();
-    this.hydra.synth.osc(50, 0.1, 1.5).out();
+    //this.hydra.synth.osc(50, 0.1, 1.5).out();
+    // this.hydra.synth.osc(50, 0.1, 1.5).out();
   },
 };
 </script>
@@ -74,5 +88,36 @@ export default {
   position: absolute;
   bottom: 50px;
   left: 50px;
+}
+
+.hideBG {
+  position: absolute;
+  z-index: 100;
+  bottom: 50px;
+  right: 50px;
+  width: 50px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: repeating-radial-gradient(#0023ff, #f1f4f5 15px);
+  transform: rotate(45deg);
+  border: 3px solid #0023ff;
+  transition: all 0.5s cubic-bezier(0.28, 0.84, 0.42, 1);
+  background-size: 100% 100%;
+  background-position: 50% 50%;
+}
+
+.hideBG:hover {
+  background-size: 20% 20%;
+}
+
+.hideBG.canvasHidden {
+  border-radius: 100% 0;
+  filter: blur(2px);
+}
+
+.hideBG.canvasHidden:hover {
+  background-size: 200% 200%;
+  filter: blur(0);
+
 }
 </style>
