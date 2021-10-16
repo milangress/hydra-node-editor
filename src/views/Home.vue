@@ -55,7 +55,7 @@ export default {
         width: "50px",
       }).setName(settings.name);
 
-      newNode.addInputInterface("Code");
+      newNode.addInputInterface("In");
 
       settings.inputs.forEach(function (input) {
         const optionsMap = {
@@ -73,9 +73,9 @@ export default {
         newNode.addInputInterface("texture", "textOption", "");
       }
 
-      newNode.addOutputInterface("Output");
+      newNode.addOutputInterface("Out");
       newNode.onCalculate((n) => {
-        let prevCode = n.getInterface("Code").value ?? "";
+        let prevCode = n.getInterface("In").value ?? "";
         if (prevCode.length > 1) {
           prevCode = prevCode + ".";
         }
@@ -95,7 +95,7 @@ export default {
         const hydraInstance = settings.type === "src" ? "hydraInstance." : "";
         const result = `${hydraInstance}${settings.name}(${inputString})`;
         // console.log(settings.name, result);
-        n.getInterface("Output").value = prevCode + result;
+        n.getInterface("Out").value = prevCode + result;
       });
       //newNode.build();
 
