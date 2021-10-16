@@ -379,8 +379,40 @@ export default {
       z-index: 2;
     }
   }
+  .dark-context-menu {
+    background: white;
+    color: black;
+    border: 1px solid black;
+
+    .item {
+      justify-content: space-between;
+      align-items: flex-start !important;
+    }
+
+    .item > .flex-fill {
+      text-align: left;
+    }
+
+    .item + .item {
+      border-top: 1px solid black;
+    }
+
+    >.divider {
+      height: 3px;
+      background-color: black;
+    }
+
+    .item:not(.--header):not(.--active):not(.--disabled):hover {
+      background: blue;
+      color: white;
+    }
+    .item:not(.--header):not(.--active):is(.--disabled):hover {
+      background: lightgray;
+    }
+  }
 }
 .node-interface {
   padding: 0 0.1em 0;
 }
+
 </style>
