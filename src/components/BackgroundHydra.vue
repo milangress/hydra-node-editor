@@ -109,6 +109,7 @@ export default {
   -webkit-text-stroke: 1.1px #000;
   filter: blur(0.1px) brightness(99%) grayscale(100%) contrast(5000%);
   mix-blend-mode: multiply;
+  pointer-events: none;
 }
 
 .hideBG {

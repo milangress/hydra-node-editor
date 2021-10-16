@@ -17,7 +17,8 @@ import { TextNode } from "@/baklavajs-nodes/TextNode";
 import { CodeNode } from "@/baklavajs-nodes/CodeNode";
 import { RenderBackgroundNode } from "@/baklavajs-nodes/RenderBackgroundNode";
 
-import RenderOption from "@/components/RenderOption.vue";
+// import RenderOption from "@/components/RenderOption.vue";
+import RenderIFrameOption from "@/components/RenderIFrameOption"
 import CodeOption from "@/components/CodeOption.vue";
 import BackgroundHydra from "@/components/BackgroundHydra.vue";
 import sendToBgRenderOption from "@/components/SendBGRenderOption.vue";
@@ -138,7 +139,7 @@ export default {
     // Show a minimap in the top right corner
     this.viewPlugin.enableMinimap = false;
 
-    this.viewPlugin.registerOption("RenderOption", RenderOption);
+    this.viewPlugin.registerOption("RenderOption", RenderIFrameOption);
     this.viewPlugin.registerOption("CodeOption", CodeOption);
     this.viewPlugin.registerOption(
       "sendToBgRenderOption",
@@ -327,8 +328,9 @@ export default {
       height: 1px;
       color: transparent;
     }
-    .__content > div > div {
+    .__content > div > .my-editor {
       margin: 0;
+      padding: 0;
     }
   }
 
