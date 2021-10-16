@@ -1,7 +1,7 @@
 module.exports = {
   configureWebpack: {
     resolve: {
-      extensions: ['*', '.mjs', '.js', '.json']
+      extensions: ["*", ".mjs", ".js", ".json"],
     },
     module: {
       rules: [

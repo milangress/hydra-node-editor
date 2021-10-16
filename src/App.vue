@@ -15,9 +15,12 @@
 </template>
 
 <script>
-import firebase from "firebase";
-import useAuth from "@vueuse/firebase/useAuth";
-const { useAuth: useAuthLocal } = useAuth
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+
+// const auth = firebase.auth();
+import { useAuth } from "@vueuse/firebase/useAuth";
+// const { useAuth: useAuthLocal } = useAuth
 export default {
   components: {},
   name: "App",
@@ -27,7 +30,7 @@ export default {
   setup() {
     const { GoogleAuthProvider } = firebase.auth;
 
-    const { isAuthenticated, user } = useAuthLocal(firebase.auth);
+    const { isAuthenticated, user } = useAuth(firebase.auth);
 
     const signIn = () =>
       firebase.auth().signInWithPopup(new GoogleAuthProvider());

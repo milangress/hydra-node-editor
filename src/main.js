@@ -16,7 +16,7 @@ import vClickOutside from "v-click-outside";
 
 Vue.use(vClickOutside);
 
-import * as firebase from "firebase";
+import firebase from "firebase/compat/app";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCrEl1SCEhfLe0lUtOOkGnu_Bl0rCx6Rew",
@@ -28,6 +28,9 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+
+import VueCompositionAPI from "@vue/composition-api";
+Vue.use(VueCompositionAPI);
 
 new Vue({
   router,
