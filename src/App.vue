@@ -1,11 +1,13 @@
 <template>
   <div id="app">
-    <pre v-if="isAuthenticated">{{ user }}</pre>
+    <nav class="auth-header">
+    <pre v-if="isAuthenticated">{{ user.displayName }}</pre>
     <div v-else>
       <button @click="signIn">
         Sign In with Google
       </button>
     </div>
+    </nav>
     <!--    <div id="nav">-->
     <!--      <router-link to="/">Home</router-link> |-->
     <!--      <router-link to="/about">About</router-link>-->
@@ -69,5 +71,10 @@ body {
       color: #42b983;
     }
   }
+}
+.auth-header {
+  position: fixed;
+  top: 20px;
+  left: 20px;
 }
 </style>
