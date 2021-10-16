@@ -1,5 +1,8 @@
 <template>
   <div id="node-editor-wrapper" style="height: 100vh; width: 100%">
+    <nav class="navbar navbar-default">
+      <button @click="saveNetwork">Save</button>
+    </nav>
     <baklava-editor :plugin="viewPlugin" />
     <BackgroundHydra></BackgroundHydra>
   </div>
@@ -183,6 +186,10 @@ export default {
       n.position.y = y;
       return n;
     },
+    saveNetwork() {
+      const savedJSON = this.editor.save()
+      console.log(savedJSON)
+    }
   },
 };
 </script>
@@ -425,5 +432,10 @@ export default {
 .node-interface {
   padding: 0 0.1em 0;
 }
-
+.navbar {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
 </style>
