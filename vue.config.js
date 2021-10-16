@@ -1,11 +1,16 @@
 module.exports = {
-    configureWebpack: {
-        module: {
-            rules: [{
-                test: /\.mjs$/,
-                include: /node_modules/,
-                type: "javascript/auto"
-            }]
-        }
-    }
-}
+  configureWebpack: {
+    resolve: {
+      extensions: ['*', '.mjs', '.js', '.json']
+    },
+    module: {
+      rules: [
+        {
+          test: /\.mjs$/,
+          include: /node_modules/,
+          type: "javascript/auto",
+        },
+      ],
+    },
+  },
+};
