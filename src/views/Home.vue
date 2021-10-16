@@ -332,6 +332,11 @@ export default {
       fill: #000;
     }
   }
+  .dark-input {
+    padding: 0;
+    margin: 0;
+    max-width: 8rem;
+  }
   .--type-CodeNode {
     //width: 230px;
     max-width: 40rem;
