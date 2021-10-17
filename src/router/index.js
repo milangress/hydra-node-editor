@@ -1,10 +1,22 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Hydra from "../views/Hydra.vue";
+import NewSketch from "@/views/NewSketch";
+import Start from "@/views/Start";
 
 Vue.use(VueRouter);
 
 const routes = [
+  {
+    path: "/",
+    name: "Start",
+    component: Start,
+  },
+  {
+    path: "/new",
+    name: "New Sketch",
+    component: NewSketch,
+  },
   {
     path: "/hydra/:id",
     name: "Hydra",

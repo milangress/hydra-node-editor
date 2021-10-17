@@ -34,7 +34,9 @@ import { NodeBuilder } from "@baklavajs/core";
 
 import glslFunctions from "hydra-synth/src/glsl/glsl-functions";
 
-import MyNode from "@/components/baklavaOverwrites/MyNode"
+import MyNode from "@/components/baklavaOverwrites/MyNode";
+import { doc, updateDoc } from "firebase/firestore";
+import { fireStore } from "@/firebase";
 
 export default {
   components: { BackgroundHydra },
@@ -57,7 +59,6 @@ export default {
     this.editor.use(this.engine);
 
     this.viewPlugin.components.node = MyNode;
-
 
     const HydraNodeFactory = function (settings) {
       let newNode = new NodeBuilder("HydraNode", {
@@ -171,7 +172,7 @@ export default {
     this.addNodeWithCoordinates(RenderBackgroundNode, 600, 140);
     this.editor.addConnection(
       defaultNode.getInterface("Out"),
-        node1.getInterface("Code")
+      node1.getInterface("Code")
     );
     // console.log(node2, defaultNode);
     this.engine.calculate();
@@ -186,10 +187,17 @@ export default {
       n.position.y = y;
       return n;
     },
-    saveNetwork() {
-      const savedJSON = this.editor.save()
-      console.log(savedJSON)
-    }
+    saveNetwork: async function () {
+      const firebaseSlug = this.$route.params.id;
+      const savedJSON = this.editor.save();
+      console.log(savedJSON);
+      const serializeJSON = JSON.stringify(savedJSON)
+      const documentRef = doc(fireStore, "HydraSketch", firebaseSlug);
+
+      return await updateDoc(documentRef, {
+        savedGraph: serializeJSON,
+      });
+    },
   },
 };
 </script>
@@ -293,7 +301,7 @@ export default {
       filter: none;
       z-index: 1000;
     }
-    .dark-context-menu>.item {
+    .dark-context-menu > .item {
       background: white;
       border: 1px solid #000;
       color: black;
@@ -391,7 +399,7 @@ export default {
     .__content {
       padding: 0;
     }
-    .__content>.__options {
+    .__content > .__options {
       grid-column: 1 / -1;
       grid-row: 1 / -1;
       z-index: 2;
@@ -415,7 +423,7 @@ export default {
       border-top: 1px solid black;
     }
 
-    >.divider {
+    > .divider {
       height: 3px;
       background-color: black;
     }
