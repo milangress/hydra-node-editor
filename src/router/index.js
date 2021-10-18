@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import Hydra from "../views/Hydra.vue";
 import NewSketch from "@/views/NewSketch";
 import Start from "@/views/Start";
+import Gallery from "@/views/Gallery"
 
 Vue.use(VueRouter);
 
@@ -11,6 +12,11 @@ const routes = [
     path: "/",
     name: "Start",
     component: Start,
+  },
+  {
+    path: "/gallery",
+    name: "Gallery",
+    component: Gallery,
   },
   {
     path: "/new",
