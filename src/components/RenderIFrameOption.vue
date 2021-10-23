@@ -4,7 +4,12 @@
     ref="hydraCanvasContainer"
     @click="canvasVisible = !canvasVisible"
   >
-    <iframe :src="currentIframeUrl" class="hydraIframe" scrolling="no"></iframe>
+    <iframe
+      :src="currentIframeUrl"
+      class="hydraIframe"
+      scrolling="no"
+      :style="{ height: canvasHeight, width: canvasWidth }"
+    ></iframe>
     <div class="hydra-text">{{ currentHydraCodeInfo }}</div>
   </div>
 </template>
@@ -56,10 +61,8 @@ export default {
   },
   computed: {
     canvasWidth: function () {
-      return this.$refs.hydraCanvasContainer.getBoundingClientRect().width;
-    },
-    canvasHeight: function () {
-      return this.canvasWidth / 1.5;
+      // return this.$refs.hydraCanvasContainer.getBoundingClientRect().width;
+      return "100%";
     },
     currentIframeUrl: function () {
       return this.canvasVisible
@@ -68,6 +71,14 @@ export default {
     },
     currentHydraCodeInfo: function () {
       return this.canvasVisible ? this.currentHydraCodeString : "Paused";
+    },
+    canvasHeight: function () {
+      console.log("attrs", this.$attrs);
+      if (this.$attrs.option.height) {
+        return this.$attrs.option.height + "px";
+      } else {
+        return this.canvasWidth / 1.5;
+      }
     },
   },
   watch: {
@@ -87,10 +98,9 @@ export default {
 </script>
 
 <style scoped>
-
 .hydra-canvas-container:hover::before {
   background-color: blue;
-  content: 'Start/Stop';
+  content: "Start/Stop";
   left: 0;
   top: 30%;
   position: fixed;

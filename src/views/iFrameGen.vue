@@ -28,14 +28,17 @@ export default {
     //   fps: urlParams.get("fps"),
     // };
     // const base64 = urlParams.get("code");
-    const base64 = this.$route.params.code
-    console.log('code', base64);
+    const base64 = this.$route.params.code;
+    console.log("code", base64);
 
     if (base64) {
-      const code = this.decodeBase64(base64);
-      console.log(code);
-
-      eval(code);
+      try {
+        const code = this.decodeBase64(base64);
+        console.log("Successfully decoded", code);
+        eval(code);
+      } catch (e) {
+        console.error("FailedToDecode", e);
+      }
     }
   },
 };

@@ -92,6 +92,7 @@ export default {
       }
 
       newNode.addOutputInterface("Out");
+      newNode.addOption("renderCode", "RenderOption", "osc()", "", {height: 50});
       newNode.onCalculate((n) => {
         let prevCode = n.getInterface("In").value ?? "";
         if (prevCode.length > 1) {
@@ -114,7 +115,9 @@ export default {
         const hydraInstance = settings.type === "src" ? "hydraInstance." : "";
         const result = `${hydraInstance}${settings.name}(${inputString})`;
         // console.log(settings.name, result);
-        n.getInterface("Out").value = prevCode + result;
+        const finalCodeString = prevCode + result
+        n.getInterface("Out").value = finalCodeString;
+        n.setOptionValue("renderCode", finalCodeString);
       });
       //newNode.build();
 
@@ -191,7 +194,7 @@ export default {
       const firebaseSlug = this.$route.params.id;
       const savedJSON = this.editor.save();
       console.log(savedJSON);
-      const serializeJSON = JSON.stringify(savedJSON)
+      const serializeJSON = JSON.stringify(savedJSON);
       const documentRef = doc(fireStore, "HydraSketch", firebaseSlug);
 
       return await updateDoc(documentRef, {
