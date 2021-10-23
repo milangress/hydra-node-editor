@@ -1,5 +1,10 @@
 <template>
-  <canvas ref="iframeHydraCanvas"></canvas>
+  <canvas
+    :style="canvasStyle"
+    ref="iframeHydraCanvas"
+    :width="this.$route.query.width"
+    :height="this.$route.query.height"
+  ></canvas>
 </template>
 
 <script>
@@ -11,10 +16,26 @@ export default {
     encodeBase64: (text) => btoa(encodeURIComponent(text)),
     decodeBase64: (base64Code) => decodeURIComponent(atob(base64Code)),
   },
+  computed: {
+    canvasStyle: function () {
+      let width;
+      let height;
+      if (this.$route.query.width) {
+        width = this.$route.query.width;
+      } else {
+        width = window.innerWidth;
+      }
+      if (this.$route.query.height) {
+        height = this.$route.query.height;
+      } else {
+        height = window.innerHeight;
+      }
+      return { width, height };
+    },
+  },
   mounted() {
     const canvas = this.$refs.iframeHydraCanvas;
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+
     const hydra = new Hydra({
       detectAudio: false,
       canvas: canvas,

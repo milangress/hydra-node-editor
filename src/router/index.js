@@ -35,6 +35,7 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     meta: { layout: "empty" },
+    props: { width: "100%", height: "100%" },
     component: () =>
       import(/* webpackChunkName: "iFrameGen" */ "../views/iFrameGen.vue"),
   },

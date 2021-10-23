@@ -62,11 +62,11 @@ export default {
   computed: {
     canvasWidth: function () {
       // return this.$refs.hydraCanvasContainer.getBoundingClientRect().width;
-      return "100%";
+      return "300px";
     },
     currentIframeUrl: function () {
       return this.canvasVisible
-        ? `/iFrameGen/${this.currentHydraBase64CodeString}`
+        ? `/iFrameGen/${this.currentHydraBase64CodeString}/?width=${this.canvasWidth}&height=${this.canvasHeight}`
         : "";
     },
     currentHydraCodeInfo: function () {
