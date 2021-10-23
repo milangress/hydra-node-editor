@@ -3,7 +3,7 @@ import VueRouter from "vue-router";
 import Hydra from "../views/Hydra.vue";
 import NewSketch from "@/views/NewSketch";
 import Start from "@/views/Start";
-import Gallery from "@/views/Gallery"
+import Gallery from "@/views/Gallery";
 
 Vue.use(VueRouter);
 
@@ -34,6 +34,7 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
+    meta: { layout: "empty" },
     component: () =>
       import(/* webpackChunkName: "iFrameGen" */ "../views/iFrameGen.vue"),
   },

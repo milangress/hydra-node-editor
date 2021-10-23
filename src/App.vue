@@ -1,43 +1,26 @@
 <template>
   <div id="app">
-    <nav class="auth-header">
-    <pre v-if="isAuthenticated">{{ user.displayName }}</pre>
-    <div v-else>
-      <button @click="signIn">
-        Sign In with Google
-      </button>
-    </div>
-    </nav>
-    <!--    <div id="nav">-->
-    <!--      <router-link to="/">Home</router-link> |-->
-    <!--      <router-link to="/about">About</router-link>-->
-    <!--    </div>-->
-    <router-view />
+    <component :is="layout">
+      <router-view />
+    </component>
   </div>
 </template>
 
 <script>
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth } from "@/firebase"
+const defaultLayout = "default";
 
-import { useAuth } from "@vueuse/firebase/useAuth";
 export default {
   components: {},
   name: "App",
   data() {
     return {};
   },
-  setup() {
-    const provider = new GoogleAuthProvider();
-
-    const { isAuthenticated, user } = useAuth(auth);
-
-    const signIn = () => signInWithPopup(auth, provider);
-
-    return { isAuthenticated, user, signIn };
+  computed: {
+    layout() {
+      return (this.$route.meta.layout || defaultLayout) + "-layout";
+    },
   },
 };
-
 </script>
 
 <style lang="scss">

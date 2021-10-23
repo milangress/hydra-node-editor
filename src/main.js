@@ -6,6 +6,12 @@ import store from "./store";
 
 Vue.config.productionTip = false;
 
+import Default from "@/layouts/Default";
+import Empty from "@/layouts/Empty";
+
+Vue.component("default-layout", Default);
+Vue.component("empty-layout", Empty);
+
 import { BaklavaVuePlugin } from "@baklavajs/plugin-renderer-vue";
 import "@baklavajs/plugin-renderer-vue/dist/styles.css";
 // import "@/css/baklavaOverwrites.css";
