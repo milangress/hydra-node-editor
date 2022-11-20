@@ -43,6 +43,12 @@ export default {
     // document.body.appendChild(canvas);
 
     window.hydra = hydra;
+    // eslint-disable-next-line no-undef
+    console.log(this.$route.query.width, this.$route.query.height);
+    const widthInt = parseInt(this.$route.query.width, 10);
+    const heightInt = parseInt(this.$route.query.width, 10);
+    // eslint-disable-next-line no-undef
+    setResolution(widthInt, heightInt);
 
     //const urlParams = new URLSearchParams(window.location.search);
     // const renderParams = {
