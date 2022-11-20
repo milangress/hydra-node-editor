@@ -53,7 +53,8 @@ export default {
     },
     cleanupReadable: function (code) {
       if (code) {
-        return code.toString()
+        return code
+          .toString()
           .replaceAll(/\.hydraInstance/gm, "")
           .replaceAll(/hydraInstance/gm, "");
       } else console.error("no Data ", code);

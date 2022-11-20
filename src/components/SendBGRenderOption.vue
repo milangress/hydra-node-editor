@@ -64,10 +64,10 @@ export default {
     readableHydraString: function () {
       return this.toggleHeight ? "Expand" : this.cleanupReadable(this.value);
     },
-    toggleHeightStyle: function (){
+    toggleHeightStyle: function () {
       return {
         maxHeight: this.toggleHeight ? "0.8rem" : "50rem",
-      }
+      };
     },
   },
   watch: {

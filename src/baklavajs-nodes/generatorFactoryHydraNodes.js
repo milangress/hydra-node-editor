@@ -5,7 +5,7 @@ import glslFunctions from "hydra-synth/src/glsl/glsl-functions";
 export const HydraNodeFactory = function () {
   console.log(glslFunctions);
 
-const testval = new NodeBuilder("HydraNode")
+  const testval = new NodeBuilder("HydraNode")
     .setName("MathTest")
     .addInputInterface("Number 1", "NumberOption", 1)
     .addInputInterface("Number 2", "NumberOption", 10)
@@ -24,7 +24,7 @@ const testval = new NodeBuilder("HydraNode")
         result = n1 - n2;
       }
       n.getInterface("Output").value = result;
-    })
+    });
 
   return [testval];
 };

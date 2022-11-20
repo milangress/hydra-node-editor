@@ -26,22 +26,22 @@ export default {
   },
   props: ["value"],
   data: () => ({
-    privatValue: 'osc(50,0.1,1.5)',
+    privatValue: "osc(50,0.1,1.5)",
   }),
   methods: {
     highlighter(code) {
       return highlight(code, languages.js, "markup"); // languages.<insert language> to return html with markup
     },
     mounted() {
-      this.privatValue = this.value
+      this.privatValue = this.value;
     },
     watch: {
       value: function (val) {
-        this.privatValue = val
-      }
+        this.privatValue = val;
+      },
     },
     listeners(ev) {
-      this.$emit("input", ev)
+      this.$emit("input", ev);
     },
   },
 };
@@ -67,7 +67,7 @@ export default {
 }
 
 .my-editor .prism-editor__editor,
-.my-editor .prism-editor__editor *{
+.my-editor .prism-editor__editor * {
   user-select: none;
   pointer-events: none;
 }

@@ -92,7 +92,9 @@ export default {
       }
 
       newNode.addOutputInterface("Out");
-      newNode.addOption("renderCode", "RenderOption", "osc()", "", {height: 50});
+      newNode.addOption("renderCode", "RenderOption", "osc()", "", {
+        height: 50,
+      });
       newNode.onCalculate((n) => {
         let prevCode = n.getInterface("In").value ?? "";
         if (prevCode.length > 1) {
@@ -115,7 +117,7 @@ export default {
         const hydraInstance = settings.type === "src" ? "hydraInstance." : "";
         const result = `${hydraInstance}${settings.name}(${inputString})`;
         // console.log(settings.name, result);
-        const finalCodeString = prevCode + result
+        const finalCodeString = prevCode + result;
         n.getInterface("Out").value = finalCodeString;
         n.setOptionValue("renderCode", finalCodeString);
       });

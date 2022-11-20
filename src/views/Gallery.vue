@@ -27,7 +27,7 @@ export default {
   methods: {
     loadOwnHydras: async function (user) {
       const { uid } = user;
-      console.log(uid)
+      console.log(uid);
       const userRef = doc(fireStore, "user", uid);
       const hydraRef = collection(fireStore, "HydraSketch");
 

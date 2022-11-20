@@ -5,7 +5,13 @@
       ref="hydraCanvas"
       v-show="canvasVisible"
     ></canvas>
-    <div class="hydra-String" @click="toggleSize" :class="{small: isToggleHydraString}" >{{ hydraString }}</div>
+    <div
+      class="hydra-String"
+      @click="toggleSize"
+      :class="{ small: isToggleHydraString }"
+    >
+      {{ hydraString }}
+    </div>
     <div
       class="hideBG"
       @click="canvasVisible = !canvasVisible"
