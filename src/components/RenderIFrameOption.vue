@@ -120,6 +120,8 @@ export default {
 }
 
 .hydra-text {
+  max-width: 300px;
   text-align: left;
+  overflow-wrap: break-word;
 }
 </style>
