@@ -5,6 +5,7 @@
     @click="canvasVisible = !canvasVisible"
   >
     <iframe
+      @load="onLoadIFrame"
       :src="currentIframeUrl"
       class="hydraIframe"
       scrolling="no"
@@ -24,10 +25,23 @@ export default {
       currentHydraCodeString: "default",
       currentHydraBase64CodeString: String,
       canvasVisible: true,
+      contentWindow: null,
     };
   },
-  mounted() {},
+  mounted() {
+    this.currentHydraBase64CodeString = this.encodeBase64(
+      this.currentHydraCodeString
+    );
+  },
   methods: {
+    onLoadIFrame() {
+      console.log("onLoadIFrame");
+      const iframe = this.$refs.hydraCanvasContainer.querySelector("iframe");
+      console.log("iframe", iframe);
+      const iWindow = iframe.contentWindow;
+      iWindow.postMessage("Hello from parent", "*");
+      this.contentWindow = iWindow;
+    },
     updateCanvas: function (code) {
       const codestring = this.cleanup(code);
       console.log("Hydra eval: ", codestring);
@@ -88,9 +102,13 @@ export default {
       handler(val) {
         // this.currentHydraCodeString = this.cleanupReadable(val);
         this.currentHydraCodeString = this.cleanupReadable(val);
-        this.currentHydraBase64CodeString = this.encodeBase64(
-          this.currentHydraCodeString
-        );
+        this.contentWindow.postMessage({
+          hydraString: this.currentHydraCodeString,
+        });
+
+        // this.currentHydraBase64CodeString = this.encodeBase64(
+        //   this.currentHydraCodeString
+        // );
       },
     },
   },

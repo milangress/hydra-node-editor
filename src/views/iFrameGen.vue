@@ -1,10 +1,13 @@
 <template>
-  <canvas
-    :style="canvasStyle"
-    ref="iframeHydraCanvas"
-    :width="this.$route.query.width"
-    :height="this.$route.query.height"
-  ></canvas>
+  <div>
+    <!--    <p>{{ currentHydraCodeString }}</p>-->
+    <canvas
+      :style="canvasStyle"
+      ref="iframeHydraCanvas"
+      :width="this.$route.query.width"
+      :height="this.$route.query.height"
+    ></canvas>
+  </div>
 </template>
 
 <script>
@@ -12,6 +15,11 @@ const Hydra = require("hydra-synth");
 
 export default {
   name: "iFrameGen",
+  data() {
+    return {
+      currentHydraCodeString: "default",
+    };
+  },
   methods: {
     encodeBase64: (text) => btoa(encodeURIComponent(text)),
     decodeBase64: (base64Code) => decodeURIComponent(atob(base64Code)),
@@ -33,7 +41,27 @@ export default {
       return { width, height };
     },
   },
+  watch: {
+    currentHydraCodeString() {
+      console.log("currentHydraCodeString", this.currentHydraCodeString);
+      eval(this.currentHydraCodeString);
+    },
+  },
   mounted() {
+    window.addEventListener("message", (event) => {
+      // extract the data from the message event
+      const { data } = event;
+
+      if (!data.hydraString) {
+        console.log("no hydra data", data);
+        return;
+      }
+      console.log("hydra data:", data.hydraString);
+
+      this.currentHydraCodeString = data.hydraString;
+    });
+
+    // Setup Hydra
     const canvas = this.$refs.iframeHydraCanvas;
 
     const hydra = new Hydra({
@@ -44,9 +72,9 @@ export default {
 
     window.hydra = hydra;
     // eslint-disable-next-line no-undef
-    console.log(this.$route.query.width, this.$route.query.height);
     const widthInt = parseInt(this.$route.query.width, 10);
     const heightInt = parseInt(this.$route.query.width, 10);
+    console.log("Resolution iFrame: ", widthInt, heightInt);
     // eslint-disable-next-line no-undef
     setResolution(widthInt, heightInt);
 
@@ -75,4 +103,10 @@ Object.entries(hydra.generator.glslTransforms).filter(([key, value]) => value.ty
 */
 </script>
 
-<style scoped></style>
+<style scoped>
+p {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+</style>
