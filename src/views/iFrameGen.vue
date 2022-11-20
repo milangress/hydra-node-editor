@@ -4,8 +4,9 @@
     <canvas
       :style="canvasStyle"
       ref="iframeHydraCanvas"
-      :width="this.$route.query.width"
-      :height="this.$route.query.height"
+      :width="scaledWidth"
+      :height="scaledHeight"
+      class="iFrame-hydra-canvas"
     ></canvas>
   </div>
 </template>
@@ -18,6 +19,7 @@ export default {
   data() {
     return {
       currentHydraCodeString: "osc().out()",
+      scaleFactor: 4,
     };
   },
   methods: {
@@ -25,16 +27,22 @@ export default {
     decodeBase64: (base64Code) => decodeURIComponent(atob(base64Code)),
   },
   computed: {
+    scaledWidth() {
+      return parseInt(this.$route.query.width, 10) / this.scaleFactor;
+    },
+    scaledHeight() {
+      return parseInt(this.$route.query.height, 10) / this.scaleFactor;
+    },
     canvasStyle: function () {
       let width;
       let height;
-      if (this.$route.query.width) {
-        width = this.$route.query.width;
+      if (this.scaledWidth) {
+        width = this.scaledWidth;
       } else {
         width = window.innerWidth;
       }
-      if (this.$route.query.height) {
-        height = this.$route.query.height;
+      if (this.scaledHeight) {
+        height = this.scaledHeight;
       } else {
         height = window.innerHeight;
       }
@@ -72,11 +80,10 @@ export default {
 
     window.hydra = hydra;
     // eslint-disable-next-line no-undef
-    const widthInt = parseInt(this.$route.query.width, 10);
-    const heightInt = parseInt(this.$route.query.width, 10);
-    console.log("Resolution iFrame: ", widthInt, heightInt);
+
+    console.log("Resolution iFrame: ", this.scaledWidth, this.scaledHeight);
     // eslint-disable-next-line no-undef
-    setResolution(widthInt, heightInt);
+    setResolution(this.scaledWidth, this.scaledHeight);
 
     //const urlParams = new URLSearchParams(window.location.search);
     // const renderParams = {
@@ -108,5 +115,11 @@ p {
   font-size: 1.5rem;
   font-weight: bold;
   color: #333;
+}
+.iFrame-hydra-canvas {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform: translateX(-50%);
 }
 </style>
