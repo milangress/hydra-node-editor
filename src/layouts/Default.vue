@@ -1,11 +1,9 @@
 <template>
   <div id="app">
     <nav class="auth-header">
-      <pre v-if="isAuthenticated">{{ user.displayName }}</pre>
-      <div v-else>
-        <button @click="signIn">
-          Sign In with Google
-        </button>
+      <pre v-if="isAuthenticated" @click="signOut">{{ user.displayName }}</pre>
+      <div v-else-if="!user">
+        <button @click="signIn">Sign In with Google</button>
       </div>
     </nav>
     <!--    <div id="nav">-->
@@ -18,7 +16,7 @@
 
 <script>
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth } from "@/firebase"
+import { auth } from "@/firebase";
 
 import { useAuth } from "@vueuse/firebase/useAuth";
 export default {
@@ -34,10 +32,14 @@ export default {
 
     const signIn = () => signInWithPopup(auth, provider);
 
-    return { isAuthenticated, user, signIn };
+    const signOut = () => {
+      console.log("signing out", auth);
+      auth.signOut();
+    };
+
+    return { isAuthenticated, user, signIn, signOut };
   },
 };
-
 </script>
 
 <style lang="scss">
@@ -74,5 +76,16 @@ body {
   position: fixed;
   top: 20px;
   left: 20px;
+  z-index: 5000;
+  animation-name: einblendung;
+  animation-duration: 15s;
+}
+@keyframes einblendung {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 </style>
