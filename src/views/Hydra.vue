@@ -92,9 +92,15 @@ export default {
       }
 
       newNode.addOutputInterface("Out");
-      newNode.addOption("renderCode", "RenderOption", "osc()", "", {
-        height: 50,
-      });
+      newNode.addOption(
+        "renderCode",
+        "RenderOption",
+        settings.type === "src" ? `${settings.name}()` : "osc()",
+        "",
+        {
+          height: 50,
+        }
+      );
       newNode.onCalculate((n) => {
         let prevCode = n.getInterface("In").value ?? "";
         if (prevCode.length > 1) {

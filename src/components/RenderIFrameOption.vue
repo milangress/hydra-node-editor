@@ -30,6 +30,8 @@ export default {
     };
   },
   mounted() {
+    console.log("mounted", this.name, this.value);
+    this.currentHydraCodeString = this.cleanupReadable(this.value);
     this.currentHydraBase64CodeString = this.encodeBase64(
       this.currentHydraCodeString
     );
