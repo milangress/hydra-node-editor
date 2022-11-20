@@ -2,7 +2,7 @@
   <div
     class="hydra-canvas-container"
     ref="hydraCanvasContainer"
-    @click="canvasVisible = !canvasVisible"
+    @click="startStopCanvas"
   >
     <iframe
       @load="onLoadIFrame"
@@ -22,10 +22,11 @@ export default {
   props: ["name", "value"],
   data() {
     return {
-      currentHydraCodeString: "osc().out()",
+      currentHydraCodeString: "none",
       currentHydraBase64CodeString: String,
       canvasVisible: true,
       contentWindow: null,
+      backupStringWhilePaused: undefined,
     };
   },
   mounted() {
@@ -34,6 +35,17 @@ export default {
     );
   },
   methods: {
+    startStopCanvas() {
+      if (this.canvasVisible) {
+        this.backupStringWhilePaused = this.currentHydraCodeString;
+      } else {
+        this.currentHydraCodeString = this.backupStringWhilePaused;
+      }
+      this.currentHydraBase64CodeString = this.encodeBase64(
+        this.currentHydraCodeString
+      );
+      this.canvasVisible = !this.canvasVisible;
+    },
     onLoadIFrame() {
       console.log("onLoadIFrame");
       const iframe = this.$refs.hydraCanvasContainer.querySelector("iframe");
@@ -41,6 +53,12 @@ export default {
       const iWindow = iframe.contentWindow;
       iWindow.postMessage("Hello from parent", "*");
       this.contentWindow = iWindow;
+      this.contentWindow.postMessage(
+        {
+          hydraString: this.currentHydraCodeString,
+        },
+        "*"
+      );
     },
     updateCanvas: function (code) {
       const codestring = this.cleanup(code);

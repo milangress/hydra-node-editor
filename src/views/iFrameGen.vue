@@ -18,7 +18,7 @@ export default {
   name: "iFrameGen",
   data() {
     return {
-      currentHydraCodeString: "osc().out()",
+      currentHydraCodeString: "none",
       scaleFactor: 4,
     };
   },
@@ -97,7 +97,12 @@ export default {
       try {
         const code = this.decodeBase64(base64);
         console.log("Successfully decoded", code);
-        eval(code);
+        if (code === "none" || code === undefined) {
+          console.log("No code to eval");
+        } else {
+          this.currentHydraCodeString = code;
+          eval(code);
+        }
       } catch (e) {
         console.error("FailedToDecode", e);
       }
