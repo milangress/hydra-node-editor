@@ -103,7 +103,11 @@ export default {
         console.log(settingsWithNames);
         const inputs = settingsWithNames.map(function (input) {
           console.log(input.uid, input);
-          return n.getInterface(input.uid).value;
+          if (input.type === "float") {
+            return parseFloat(n.getInterface(input.uid).value.toFixed(3));
+          } else {
+            return n.getInterface(input.uid).value;
+          }
         });
         let textureVec4;
         if (settings.type === "combine" || settings.type === "combineCoord") {
