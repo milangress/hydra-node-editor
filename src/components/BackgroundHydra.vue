@@ -5,7 +5,7 @@
       ref="hydraCanvas"
       v-show="canvasVisible"
     ></canvas>
-    <div class="hydra-String">{{ hydraString }}</div>
+    <div class="hydra-String" @click="toggleSize" :class="{small: isToggleHydraString}" >{{ hydraString }}</div>
     <div
       class="hideBG"
       @click="canvasVisible = !canvasVisible"
@@ -24,6 +24,7 @@ export default {
       currentHydraCodeString: "default",
       hydra: false,
       canvasVisible: true,
+      isToggleHydraString: true,
     };
   },
   computed: {
@@ -43,12 +44,15 @@ export default {
     },
   },
   methods: {
+    toggleSize() {
+      console.log("toggle Hydra String");
+      this.isToggleHydraString = !this.isToggleHydraString;
+    },
     cleanup: function (code) {
       // hydraInstance = "this.hydra.synth"
       if (code != null) {
         //const codestring = `this.hydra.synth.${code.toString()}.out()`
-        const codestring = code.toString()
-            .replaceAll('hydraInstance.', '')
+        const codestring = code.toString().replaceAll("hydraInstance.", "");
         // .replaceAll(/(?<!hydraInstance.)osc/gm, "hydraInstance.osc")
         // .replaceAll(/\.hydraInstance/gm, hydraInstance)
         // .replaceAll(/hydraInstance/gm, hydraInstance);
@@ -64,7 +68,7 @@ export default {
           .toString()
           .replaceAll(/\.hydraInstance/gm, "")
           .replaceAll(/hydraInstance/gm, "")
-          .replaceAll(',', ', ')
+          .replaceAll(",", ", ");
       } else return "";
     },
   },
@@ -99,17 +103,22 @@ export default {
 
 .hydra-String {
   position: absolute;
+  z-index: 100;
   text-align: left;
   bottom: 50px;
   left: 50px;
   max-width: 50vw;
   max-height: 60vh;
-  font-size: 3em;
+  font-size: 1.5em;
   background-color: white;
   -webkit-text-stroke: 1.1px #000;
   filter: blur(0.1px) brightness(99%) grayscale(100%) contrast(5000%);
   mix-blend-mode: multiply;
-  pointer-events: none;
+}
+.small {
+  font-size: 0.5em;
+  max-width: 20vw;
+  max-height: 20vh;
 }
 
 .hideBG {
