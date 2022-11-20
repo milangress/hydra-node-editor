@@ -9,7 +9,7 @@
       :src="currentIframeUrl"
       class="hydraIframe"
       scrolling="no"
-      :style="{ height: canvasHeight, width: canvasWidth }"
+      :style="{ height: canvasHeight + 'px', width: canvasWidth + 'px' }"
     ></iframe>
     <div class="hydra-text">{{ currentHydraCodeInfo }}</div>
   </div>
@@ -76,7 +76,7 @@ export default {
   computed: {
     canvasWidth: function () {
       // return this.$refs.hydraCanvasContainer.getBoundingClientRect().width;
-      return "300px";
+      return 300;
     },
     currentIframeUrl: function () {
       return this.canvasVisible
@@ -87,11 +87,10 @@ export default {
       return this.canvasVisible ? this.currentHydraCodeString : "Paused";
     },
     canvasHeight: function () {
-      console.log("attrs", this.$attrs);
       if (this.$attrs.option.height) {
-        return this.$attrs.option.height + "px";
+        return this.$attrs.option.height;
       } else {
-        return this.canvasWidth / 1.5;
+        return this.canvasWidth / (16 / 10);
       }
     },
   },
