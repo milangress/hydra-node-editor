@@ -18,7 +18,7 @@ export default {
   props: ["name", "value"],
   data() {
     return {
-      currentHydraCodeString: "default",
+      currentHydraCodeString: "osc().out()",
       hydra: false,
     };
   },

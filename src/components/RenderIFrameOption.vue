@@ -22,7 +22,7 @@ export default {
   props: ["name", "value"],
   data() {
     return {
-      currentHydraCodeString: "default",
+      currentHydraCodeString: "osc().out()",
       currentHydraBase64CodeString: String,
       canvasVisible: true,
       contentWindow: null,
@@ -102,9 +102,19 @@ export default {
       handler(val) {
         // this.currentHydraCodeString = this.cleanupReadable(val);
         this.currentHydraCodeString = this.cleanupReadable(val);
-        this.contentWindow.postMessage({
-          hydraString: this.currentHydraCodeString,
-        });
+        if (this.contentWindow) {
+          this.contentWindow.postMessage(
+            {
+              hydraString: this.currentHydraCodeString,
+            },
+            "*"
+          );
+        } else {
+          console.log(
+            "could not send message to iframe",
+            this.currentHydraCodeString
+          );
+        }
 
         // this.currentHydraBase64CodeString = this.encodeBase64(
         //   this.currentHydraCodeString

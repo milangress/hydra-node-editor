@@ -17,7 +17,7 @@ export default {
   name: "iFrameGen",
   data() {
     return {
-      currentHydraCodeString: "default",
+      currentHydraCodeString: "osc().out()",
     };
   },
   methods: {
